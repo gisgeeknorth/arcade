@@ -44,7 +44,7 @@ for (var response in rankinglayer) {
     var numbertopics = Count(rankarray)
     var topicindex = 0;
     // Iterate through each choice in the array...
-    // I provide both "Rank" and "Polularity" for easy of use and graphing..
+    // I provide both "Rank" and "Popularity" for easy of use and graphing..
     for (var topic in rankarray) {
         rankDict.features[dictindex] = {
             'attributes': {
