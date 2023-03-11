@@ -6,7 +6,7 @@
 // is used on a Survey123 form, the individual responses are stored in a single string field
 // as a comma-separated list.
 //
-// What frut do you like? (Choose all that apply)
+// What fruit do you like? (Choose all that apply)
 //  Apples
 //  Grapes
 //  Strawberries
