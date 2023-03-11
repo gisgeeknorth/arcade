@@ -1,4 +1,28 @@
-// Point to the hosted feature layer by id...
+//////////////////////
+// Parse list of string vaklues out of a single field
+//////////////////////
+//
+// This script is useful for working with Survey123 data. When a multiple choice question
+// is used on a Survey123 form, the individual responses are stored in a single string field
+// as a comma-separated list.
+//
+// What frut do you like? (Choose all that apply)
+//  Apples
+//  Grapes
+//  Strawberries
+//
+// Respondent 1: "Apples"
+// Respondent 2: "Apples,Strawberries"
+// Respondent 3: "Apples,Grapes,Strawberries"
+// Respondent 4: "Apples,Grapes"
+//
+// This data structure is hard to chart in a Dashboard, and also has no easy way to rank the 
+// most common response.
+//
+// This script works for a chart element in ArcGIS Dashboard.  It returns a feature set with
+// the individual reponses as rows, and the popularity and rank.
+//
+// Point to the hosted feature layer by id (you need to specify your own ID and determine the field name...
 var rankinglayer = FeatureSetByPortalItem(
     Portal('https://esricanada.maps.arcgis.com/'),
     'f8efd6ed118b410182dd045e1ad73ccf', 0, 
@@ -13,11 +37,13 @@ var rankDict = {
 }; 
 var dictindex = 0;
 var responseindex = 0; 
+// Interate through each response in the data set...
 for (var response in rankinglayer) {
     var rankstring = response['SessionTypeRanking']
     var rankarray = split(rankstring, ',')
     var numbertopics = Count(rankarray)
     var topicindex = 0;
+    // Iterate through each choice in the array...
     for (var topic in rankarray) {
         rankDict.features[dictindex] = {
             'attributes': {
