@@ -1,0 +1,38 @@
+// Point to the hosted feature layer by id...
+var rankinglayer = FeatureSetByPortalItem(
+    Portal('https://esricanada.maps.arcgis.com/'),
+    'f8efd6ed118b410182dd045e1ad73ccf', 0, 
+    ['SessionTypeRanking'], false);
+// Set up a "dictionary" to work with the data in memory...
+var rankDict = {
+  'fields': [{'name': 'Topic', 'type': 'esriFieldTypeString'},
+             {'name': 'Rank', 'type': 'esriFieldTypeInteger'},
+             {'name': 'Popularity', 'type': 'esriFieldTypeInteger'}], 
+             'geometryType': '',
+             'features': [] 
+}; 
+var dictindex = 0;
+var responseindex = 0; 
+for (var response in rankinglayer) {
+    var rankstring = response['SessionTypeRanking']
+    var rankarray = split(rankstring, ',')
+    var numbertopics = Count(rankarray)
+    var topicindex = 0;
+    for (var topic in rankarray) {
+        rankDict.features[dictindex] = {
+            'attributes': {
+                'Topic':rankarray[topicindex],
+                'Rank':(topicindex + 1),
+                'Popularity':(numbertopics - topicindex)
+            }
+        }
+        topicindex++;
+        dictindex++;
+    }
+    responseindex++;
+
+}
+// Convert the dictionary to a feature set that Dashboard recognizes...
+var fs_dict = FeatureSet(Text(rankDict));
+// Return the featureset
+return fs_dict;
